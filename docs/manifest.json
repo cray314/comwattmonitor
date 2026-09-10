@@ -1,0 +1,12 @@
+{
+  "name": "Maison — énergie",
+  "short_name": "Énergie",
+  "description": "Suivi de la production solaire et de la consommation de la maison",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#10262B",
+  "theme_color": "#10262B",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
