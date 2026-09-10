@@ -1,6 +1,6 @@
 {
   "site_id": null,
-  "consumption_threshold_kw": 5.0,
+  "consumption_threshold_kw": 3.0,
   "production_drop_ratio": 0.6,
   "production_drop_window_minutes": 15,
   "production_min_before_drop_kw": 0.5,
