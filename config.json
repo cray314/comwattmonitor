@@ -1,10 +1,18 @@
 {
   "site_id": null,
-  "consumption_threshold_kw": 1.5,
+  "consumption_threshold_kw": 5.0,
   "production_drop_ratio": 0.6,
   "production_drop_window_minutes": 15,
   "production_min_before_drop_kw": 0.5,
   "production_check_start_hour": 8,
   "production_check_end_hour": 20,
-  "alert_cooldown_minutes": 60
+  "alert_cooldown_minutes": 60,
+  "leak_detection": {
+    "enabled": true,
+    "pump_on_threshold_kw": 0.2,
+    "window_minutes": 30,
+    "min_cycles": 3,
+    "min_cumulative_on_minutes": 15,
+    "sample_minutes_hint": 1
+  }
 }
