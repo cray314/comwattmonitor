@@ -9,8 +9,8 @@
   "alert_cooldown_minutes": 60,
   "leak_detection": {
     "enabled": true,
-    "pump_on_threshold_kw": 0.2,
-    "window_minutes": 30,
+    "pump_on_threshold_kw": 1.2,
+    "window_minutes": 45,
     "min_cycles": 3,
     "min_cumulative_on_minutes": 15,
     "sample_minutes_hint": 1
