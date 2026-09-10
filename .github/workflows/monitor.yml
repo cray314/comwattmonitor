@@ -1,0 +1,40 @@
+name: Comwatt monitor
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dépendances
+        run: pip install -r requirements.txt
+
+      - name: Lancer la vérification
+        env:
+          COMWATT_USERNAME: ${{ secrets.COMWATT_USERNAME }}
+          COMWATT_PASSWORD: ${{ secrets.COMWATT_PASSWORD }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ALERT_EMAIL_FROM: ${{ secrets.ALERT_EMAIL_FROM }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+        run: python comwatt_monitor.py
+
+      - name: Sauvegarder l'état et le statut
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: mise à jour du statut Comwatt"
+          file_pattern: "state.json docs/status.json"
