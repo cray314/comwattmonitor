@@ -156,6 +156,10 @@
     <div>Chargement du dernier statut…</div>
   </div>
 
+  <div class="thresholds" id="leakCard" style="margin-bottom: 12px;">
+    <div>Surveillance fuite d'eau : <b id="leakStatus">—</b></div>
+  </div>
+
   <div class="thresholds">
     <div>Seuil de pic de consommation : <b id="thConsumption">—</b> kW</div>
     <div>Seuil de chute de production : <b id="thProduction">—</b> %</div>
@@ -178,6 +182,16 @@ async function loadStatus() {
     document.getElementById('cons').textContent = data.consumption_kw != null ? data.consumption_kw.toFixed(2) : '—';
     document.getElementById('thConsumption').textContent = data.thresholds?.consumption_threshold_kw ?? '—';
     document.getElementById('thProduction').textContent = data.thresholds ? Math.round(data.thresholds.production_drop_ratio * 100) : '—';
+
+    const leak = data.leak_check;
+    const leakStatus = document.getElementById('leakStatus');
+    if (leak && leak.enabled) {
+      leakStatus.textContent = `${leak.cycles_in_window} cycle(s) / ${leak.on_minutes_in_window} min sur ${leak.window_minutes} min`;
+    } else if (leak) {
+      leakStatus.textContent = 'désactivée';
+    } else {
+      leakStatus.textContent = '—';
+    }
 
     const updatedDate = new Date(data.updated_at);
     const mins = Math.round((Date.now() - updatedDate.getTime()) / 60000);
