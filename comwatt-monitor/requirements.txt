@@ -1,1 +1,0 @@
-comwatt-client>=0.4.1
