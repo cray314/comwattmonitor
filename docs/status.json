@@ -1,12 +1,16 @@
 {
-  "updated_at": "2026-09-10T12:22:17.418419+00:00",
-  "production_kw": 6.89,
-  "consumption_kw": 1.9,
-  "active_alerts": [
-    "\u26a1 Pic de consommation : 1.90 kW (seuil 1.5 kW)."
-  ],
+  "updated_at": "2026-09-10T12:42:12.905577+00:00",
+  "production_kw": 6.804,
+  "consumption_kw": 1.901,
+  "active_alerts": [],
   "thresholds": {
-    "consumption_threshold_kw": 1.5,
+    "consumption_threshold_kw": 5.0,
     "production_drop_ratio": 0.6
+  },
+  "leak_check": {
+    "enabled": true,
+    "cycles_in_window": 1,
+    "on_minutes_in_window": 14.0,
+    "window_minutes": 30
   }
 }
