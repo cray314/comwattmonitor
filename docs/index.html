@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Maison — énergie</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#10262B" />
+<link rel="apple-touch-icon" href="icon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #10262B;
+    --panel: #16333A;
+    --panel-edge: #21444C;
+    --sun: #F4A93B;
+    --grid: #6FC3D9;
+    --alert: #E2593B;
+    --text: #F2F0E9;
+    --muted: #8FA8AC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+  }
+  body {
+    padding: 28px 20px 48px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0;
+  }
+  .live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #6FD98F;
+    box-shadow: 0 0 0 3px rgba(111, 217, 143, 0.2);
+  }
+  .dot.stale { background: var(--muted); box-shadow: none; }
+
+  .readings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .reading {
+    background: var(--panel);
+    border: 1px solid var(--panel-edge);
+    border-radius: 18px;
+    padding: 18px 16px;
+  }
+  .reading .label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .reading .value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1;
+  }
+  .reading .unit {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+  .reading.production .value { color: var(--sun); }
+  .reading.consumption .value { color: var(--grid); }
+
+  .status-card {
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .status-card.ok {
+    background: rgba(111, 217, 143, 0.1);
+    border: 1px solid rgba(111, 217, 143, 0.3);
+    color: #B7E8C6;
+  }
+  .status-card.alert {
+    background: rgba(226, 89, 59, 0.12);
+    border: 1px solid rgba(226, 89, 59, 0.35);
+    color: #F4C3B4;
+  }
+  .status-card.alert .status-title {
+    font-weight: 600;
+    color: var(--alert);
+    margin-bottom: 4px;
+  }
+
+  .thresholds {
+    background: var(--panel);
+    border: 1px solid var(--panel-edge);
+    border-radius: 18px;
+    padding: 16px 18px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .thresholds div + div { margin-top: 6px; }
+  .thresholds b { color: var(--text); font-weight: 500; }
+
+  footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Maison</h1>
+    <div class="live"><span class="dot" id="dot"></span><span id="updated">—</span></div>
+  </header>
+
+  <div class="readings">
+    <div class="reading production">
+      <div class="label">Production solaire</div>
+      <div><span class="value" id="prod">—</span><span class="unit">kW</span></div>
+    </div>
+    <div class="reading consumption">
+      <div class="label">Consommation</div>
+      <div><span class="value" id="cons">—</span><span class="unit">kW</span></div>
+    </div>
+  </div>
+
+  <div class="status-card" id="statusCard">
+    <div>Chargement du dernier statut…</div>
+  </div>
+
+  <div class="thresholds">
+    <div>Seuil de pic de consommation : <b id="thConsumption">—</b> kW</div>
+    <div>Seuil de chute de production : <b id="thProduction">—</b> %</div>
+    <div style="margin-top:10px; color: var(--muted);">Pour ajuster ces seuils, modifie <code>config.json</code> dans le dépôt.</div>
+  </div>
+
+  <footer>Mis à jour automatiquement toutes les 10 minutes par GitHub Actions.</footer>
+
+<script>
+async function loadStatus() {
+  const dot = document.getElementById('dot');
+  const updated = document.getElementById('updated');
+  const statusCard = document.getElementById('statusCard');
+  try {
+    const res = await fetch('status.json?t=' + Date.now());
+    if (!res.ok) throw new Error('no status yet');
+    const data = await res.json();
+
+    document.getElementById('prod').textContent = data.production_kw != null ? data.production_kw.toFixed(2) : '—';
+    document.getElementById('cons').textContent = data.consumption_kw != null ? data.consumption_kw.toFixed(2) : '—';
+    document.getElementById('thConsumption').textContent = data.thresholds?.consumption_threshold_kw ?? '—';
+    document.getElementById('thProduction').textContent = data.thresholds ? Math.round(data.thresholds.production_drop_ratio * 100) : '—';
+
+    const updatedDate = new Date(data.updated_at);
+    const mins = Math.round((Date.now() - updatedDate.getTime()) / 60000);
+    updated.textContent = mins <= 1 ? "à l'instant" : `il y a ${mins} min`;
+    dot.classList.toggle('stale', mins > 20);
+
+    if (data.active_alerts && data.active_alerts.length > 0) {
+      statusCard.className = 'status-card alert';
+      statusCard.innerHTML = '<div class="status-title">Alerte en cours</div>' +
+        data.active_alerts.map(a => `<div>${a}</div>`).join('');
+    } else {
+      statusCard.className = 'status-card ok';
+      statusCard.innerHTML = '<div>Tout va bien, aucun seuil dépassé.</div>';
+    }
+  } catch (e) {
+    statusCard.className = 'status-card';
+    statusCard.innerHTML = '<div>Pas encore de données — attends le premier passage du contrôle automatique (jusqu\'à 10 min après la mise en place).</div>';
+    dot.classList.add('stale');
+  }
+}
+loadStatus();
+setInterval(loadStatus, 60000);
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js').catch(() => {});
+}
+</script>
+</body>
+</html>
