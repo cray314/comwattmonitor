@@ -1,4 +1,5 @@
 {
   "last_alert_consumption": "2026-09-10T12:22:17.418419+00:00",
-  "last_alert_production": null
+  "last_alert_production": null,
+  "last_alert_leak": "2026-09-10T13:39:19.299944+00:00"
 }
