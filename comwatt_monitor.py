@@ -69,24 +69,35 @@ def find_series(payload: dict, key_candidates):
 
 
 def point_value(point):
-    """Extrait (timestamp, valeur) d'un point de série temporelle, quel que
-    soit le nom exact des champs utilisés par l'API."""
-    ts = point.get("date") or point.get("timestamp") or point.get("time")
-    val = point.get("value")
-    if val is None:
-        val = point.get("y")
-    return ts, float(val) if val is not None else None
+    """Extrait (timestamp, valeur) d'un point de série temporelle. L'API
+    Comwatt peut renvoyer soit des dicts {date/timestamp, value}, soit des
+    paires [timestamp, valeur], soit directement des nombres bruts — on
+    gère les trois cas."""
+    if isinstance(point, (int, float)):
+        return None, float(point)
+    if isinstance(point, (list, tuple)) and len(point) >= 2:
+        return point[0], float(point[1])
+    if isinstance(point, dict):
+        ts = point.get("date") or point.get("timestamp") or point.get("time")
+        val = point.get("value")
+        if val is None:
+            val = point.get("y")
+        return ts, float(val) if val is not None else None
+    return None, None
 
 
 def latest_and_previous(series, minutes_back=15):
     """Renvoie (valeur_actuelle_kW, valeur_il_y_a_N_min_kW) à partir d'une
-    liste de points triée chronologiquement."""
+    liste de points. Trie par timestamp si disponible, sinon suppose que
+    l'API renvoie déjà les points dans l'ordre chronologique."""
     if not series:
         return None, None
-    points = [point_value(p) for p in series if point_value(p)[1] is not None]
+    points = [point_value(p) for p in series]
+    points = [p for p in points if p[1] is not None]
     if not points:
         return None, None
-    points.sort(key=lambda p: p[0])
+    if all(p[0] is not None for p in points):
+        points.sort(key=lambda p: p[0])
     latest_val = points[-1][1]
 
     # Cherche un point ~minutes_back plus tôt ; à défaut, prend le premier
