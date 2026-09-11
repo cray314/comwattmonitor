@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-09-11T19:46:45.880185+00:00",
+  "updated_at": "2026-09-11T22:02:15.348951+00:00",
   "production_kw": 6.0,
-  "consumption_kw": 0.297,
+  "consumption_kw": 0.308,
   "active_alerts": [],
   "thresholds": {
     "consumption_threshold_kw": 3.0,
@@ -9,8 +9,8 @@
   },
   "leak_check": {
     "enabled": true,
-    "cycles_in_window": 1,
-    "on_minutes_in_window": 2.0,
+    "cycles_in_window": 0,
+    "on_minutes_in_window": 0.0,
     "window_minutes": 45
   }
 }
