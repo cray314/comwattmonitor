@@ -10,7 +10,7 @@
   "leak_detection": {
     "enabled": true,
     "pump_on_threshold_kw": 1.2,
-    "window_minutes": 45,
+    "window_minutes": 60,
     "min_cycles": 3,
     "min_cumulative_on_minutes": 15,
     "sample_minutes_hint": 1
