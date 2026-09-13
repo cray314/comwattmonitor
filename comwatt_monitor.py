@@ -94,8 +94,8 @@ def point_value(point):
 
 
 def to_kw(v):
-    # Heuristique d'unité : l'API Comwatt renvoie généralement des Watts.
-    return v / 1000 if abs(v) > 50 else v
+    # L'API Comwatt renvoie systématiquement en Watts pour les mesures FLOW.
+    return v / 1000
 
 
 def latest_and_previous(series, minutes_back=15):
