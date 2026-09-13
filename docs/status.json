@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-09-13T17:10:32.627058+00:00",
-  "production_kw": 0.28,
-  "consumption_kw": 0.14,
+  "updated_at": "2026-09-13T17:20:30.567924+00:00",
+  "production_kw": 0.132,
+  "consumption_kw": 0.231,
   "active_alerts": [
-    "\u2600\ufe0f Chute de production : 1.35 kW \u2192 0.28 kW (-79%) en 15 min. Panne possible."
+    "\u2600\ufe0f Chute de production : 1.04 kW \u2192 0.13 kW (-87%) en 15 min. Panne possible."
   ],
   "thresholds": {
     "consumption_threshold_kw": 3.0,
