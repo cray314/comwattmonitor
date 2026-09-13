@@ -1,8 +1,10 @@
 {
-  "updated_at": "2026-09-13T17:04:30.604131+00:00",
-  "production_kw": 0.671,
-  "consumption_kw": 0.232,
-  "active_alerts": [],
+  "updated_at": "2026-09-13T17:10:32.627058+00:00",
+  "production_kw": 0.28,
+  "consumption_kw": 0.14,
+  "active_alerts": [
+    "\u2600\ufe0f Chute de production : 1.35 kW \u2192 0.28 kW (-79%) en 15 min. Panne possible."
+  ],
   "thresholds": {
     "consumption_threshold_kw": 3.0,
     "production_drop_ratio": 0.6
@@ -11,6 +13,6 @@
     "enabled": true,
     "cycles_in_window": 0,
     "on_minutes_in_window": 0.0,
-    "window_minutes": 45
+    "window_minutes": 60
   }
 }
