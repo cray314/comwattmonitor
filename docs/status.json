@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-09-14T14:30:51.309113+00:00",
-  "production_kw": 4.719,
-  "consumption_kw": 2.226,
+  "updated_at": "2026-09-14T14:40:34.657227+00:00",
+  "production_kw": 4.511,
+  "consumption_kw": 2.016,
   "active_alerts": [],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
@@ -11,7 +11,7 @@
     "enabled": true,
     "baseline_kw": 2.014,
     "spike_threshold_kw": 3.114,
-    "spike_count": 0,
+    "spike_count": 1,
     "window_minutes": 60
   }
 }
