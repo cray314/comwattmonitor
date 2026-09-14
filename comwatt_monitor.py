@@ -167,31 +167,6 @@ def recent_window(points, window_minutes, total_span_minutes=60):
     return points[-take:]
 
 
-def count_cycles_and_on_time(points, threshold_kw, sample_minutes_hint=1):
-    """Compte le nombre de cycles marche/arrêt (fronts montants au-dessus du
-    seuil) et le temps total passé au-dessus du seuil, dans la fenêtre
-    donnée."""
-    if not points:
-        return 0, 0.0
-    if len(points) > 1 and points[0][0] is not None and points[-1][0] is not None:
-        span_minutes = (points[-1][0] - points[0][0]).total_seconds() / 60
-        interval = span_minutes / (len(points) - 1) if span_minutes > 0 else sample_minutes_hint
-    else:
-        interval = sample_minutes_hint
-
-    was_on = False
-    cycles = 0
-    on_minutes = 0.0
-    for _, val in points:
-        is_on = val >= threshold_kw
-        if is_on:
-            on_minutes += interval
-            if not was_on:
-                cycles += 1
-        was_on = is_on
-    return cycles, on_minutes
-
-
 def send_email(subject, body, cfg):
     msg = MIMEText(body, "plain", "utf-8")
     msg["Subject"] = subject
@@ -278,21 +253,23 @@ def main():
                 f"(-{drop_ratio*100:.0f}%) en {config['production_drop_window_minutes']} min. Panne possible."
             )
 
-    # --- Critère 3 : fuite d'eau probable (pics de pompe répétés) ---
+    # --- Critère 3 : fuite d'eau probable (mesures répétées au-dessus du plancher) ---
     leak_cfg = config.get("leak_detection", {})
-    leak_cycles, leak_on_minutes = 0, 0.0
+    leak_baseline_kw, leak_spike_threshold_kw, leak_spike_count = None, None, 0
     if leak_cfg.get("enabled", False):
         kw_points = chronological_kw_points(consumption_series)
         window_points = recent_window(kw_points, leak_cfg["window_minutes"], total_span_minutes=60)
-        leak_cycles, leak_on_minutes = count_cycles_and_on_time(
-            window_points,
-            leak_cfg["pump_on_threshold_kw"],
-            sample_minutes_hint=leak_cfg.get("sample_minutes_hint", 1),
-        )
-        if leak_cycles >= leak_cfg["min_cycles"] or leak_on_minutes >= leak_cfg["min_cumulative_on_minutes"]:
+        values = [v for _, v in window_points]
+        if values:
+            leak_baseline_kw = min(values)
+            leak_spike_threshold_kw = leak_baseline_kw + leak_cfg["spike_above_baseline_kw"]
+            leak_spike_count = sum(1 for v in values if v >= leak_spike_threshold_kw)
+
+        if leak_spike_count >= leak_cfg["min_spike_samples"]:
             alerts.append(
-                f"💧 Fuite d'eau probable : pompe déclenchée {leak_cycles} fois en "
-                f"{leak_cfg['window_minutes']} min ({leak_on_minutes:.0f} min de fonctionnement cumulé)."
+                f"💧 Fuite d'eau probable : {leak_spike_count} mesures en {leak_cfg['window_minutes']} min "
+                f"dépassant le plancher de {leak_baseline_kw:.2f} kW de plus de "
+                f"{leak_cfg['spike_above_baseline_kw']} kW."
             )
 
     # --- Envoi des emails avec cooldown pour éviter le spam ---
@@ -338,8 +315,9 @@ def main():
                 },
                 "leak_check": {
                     "enabled": leak_cfg.get("enabled", False),
-                    "cycles_in_window": leak_cycles,
-                    "on_minutes_in_window": round(leak_on_minutes, 1),
+                    "baseline_kw": round(leak_baseline_kw, 3) if leak_baseline_kw is not None else None,
+                    "spike_threshold_kw": round(leak_spike_threshold_kw, 3) if leak_spike_threshold_kw is not None else None,
+                    "spike_count": leak_spike_count,
                     "window_minutes": leak_cfg.get("window_minutes"),
                 },
             },
@@ -349,7 +327,7 @@ def main():
 
     print(
         f"OK — production={prod_now} kW, consommation={cons_now} kW, "
-        f"fuite: {leak_cycles} cycles/{leak_on_minutes:.0f} min, alertes={alerts}"
+        f"fuite: {leak_spike_count} mesures au-dessus du plancher, alertes={alerts}"
     )
 
 
