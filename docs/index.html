@@ -185,8 +185,10 @@ async function loadStatus() {
 
     const leak = data.leak_check;
     const leakStatus = document.getElementById('leakStatus');
-    if (leak && leak.enabled) {
-      leakStatus.textContent = `${leak.cycles_in_window} cycle(s) / ${leak.on_minutes_in_window} min sur ${leak.window_minutes} min`;
+    if (leak && leak.enabled && leak.baseline_kw != null) {
+      leakStatus.textContent = `${leak.spike_count} mesure(s) > ${leak.spike_threshold_kw.toFixed(2)} kW sur ${leak.window_minutes} min (plancher ${leak.baseline_kw.toFixed(2)} kW)`;
+    } else if (leak && leak.enabled) {
+      leakStatus.textContent = 'en attente de données';
     } else if (leak) {
       leakStatus.textContent = 'désactivée';
     } else {
