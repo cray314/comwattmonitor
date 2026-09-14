@@ -1,9 +1,8 @@
 {
-  "updated_at": "2026-09-14T12:01:05.094927+00:00",
-  "production_kw": 6.592,
-  "consumption_kw": 3.159,
+  "updated_at": "2026-09-14T12:10:32.956996+00:00",
+  "production_kw": 6.51,
+  "consumption_kw": 1.927,
   "active_alerts": [
-    "\u26a1 Pic de consommation : 3.16 kW (seuil 3.0 kW).",
     "\ud83d\udca7 Fuite d'eau probable : pompe d\u00e9clench\u00e9e 1 fois en 60 min (30 min de fonctionnement cumul\u00e9)."
   ],
   "thresholds": {
