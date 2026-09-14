@@ -1,8 +1,10 @@
 {
-  "updated_at": "2026-09-14T08:40:33.288864+00:00",
-  "production_kw": 4.203,
-  "consumption_kw": 1.87,
-  "active_alerts": [],
+  "updated_at": "2026-09-14T08:50:34.662702+00:00",
+  "production_kw": 4.955,
+  "consumption_kw": 1.942,
+  "active_alerts": [
+    "\ud83d\udca7 Fuite d'eau probable : pompe d\u00e9clench\u00e9e 1 fois en 60 min (16 min de fonctionnement cumul\u00e9)."
+  ],
   "thresholds": {
     "consumption_threshold_kw": 3.0,
     "production_drop_ratio": 0.6
@@ -10,7 +12,7 @@
   "leak_check": {
     "enabled": true,
     "cycles_in_window": 1,
-    "on_minutes_in_window": 11.0,
+    "on_minutes_in_window": 16.0,
     "window_minutes": 60
   }
 }
