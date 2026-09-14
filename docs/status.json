@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-09-14T09:40:33.740327+00:00",
-  "production_kw": 5.688,
-  "consumption_kw": 1.834,
+  "updated_at": "2026-09-14T09:50:33.589774+00:00",
+  "production_kw": 5.847,
+  "consumption_kw": 1.911,
   "active_alerts": [
     "\ud83d\udca7 Fuite d'eau probable : pompe d\u00e9clench\u00e9e 1 fois en 60 min (30 min de fonctionnement cumul\u00e9)."
   ],
