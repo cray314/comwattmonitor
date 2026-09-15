@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-09-15T09:50:30.885817+00:00",
-  "production_kw": 5.654,
-  "consumption_kw": 2.168,
+  "updated_at": "2026-09-15T10:00:55.250742+00:00",
+  "production_kw": 5.788,
+  "consumption_kw": 3.025,
   "active_alerts": [
-    "\ud83d\udca7 Fuite d'eau probable : 4 mesures en 60 min d\u00e9passant le plancher de 1.82 kW de plus de 1.1 kW."
+    "\ud83d\udca7 Fuite d'eau probable : 5 mesures en 60 min d\u00e9passant le plancher de 1.82 kW de plus de 1.1 kW."
   ],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
@@ -13,7 +13,7 @@
     "enabled": true,
     "baseline_kw": 1.821,
     "spike_threshold_kw": 2.921,
-    "spike_count": 4,
+    "spike_count": 5,
     "window_minutes": 60
   }
 }
