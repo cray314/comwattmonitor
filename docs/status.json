@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-09-15T10:10:33.128762+00:00",
-  "production_kw": 5.921,
-  "consumption_kw": 2.536,
+  "updated_at": "2026-09-15T10:20:33.449965+00:00",
+  "production_kw": 5.981,
+  "consumption_kw": 2.475,
   "active_alerts": [
     "\ud83d\udca7 Fuite d'eau probable : 6 mesures en 60 min d\u00e9passant le plancher de 1.89 kW de plus de 1.1 kW."
   ],
