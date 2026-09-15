@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-09-15T18:40:35.338085+00:00",
-  "production_kw": 0.007,
-  "consumption_kw": 0.332,
+  "updated_at": "2026-09-15T18:50:32.062029+00:00",
+  "production_kw": 0.006,
+  "consumption_kw": 0.347,
   "active_alerts": [],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
@@ -9,16 +9,11 @@
   },
   "leak_check": {
     "enabled": true,
-    "baseline_kw": 0.332,
-    "spike_threshold_kw": 1.432,
-    "spike_count": 1,
+    "baseline_kw": 0.329,
+    "spike_threshold_kw": 1.429,
+    "spike_count": 0,
     "window_minutes": 60,
     "window_values_kw": [
-      0.447,
-      0.412,
-      3.204,
-      1.402,
-      0.408,
       0.41,
       0.383,
       0.348,
@@ -43,32 +38,37 @@
       0.335,
       0.333,
       0.333,
-      0.332
+      0.332,
+      0.331,
+      0.329,
+      0.335,
+      0.33,
+      0.347
     ],
     "recent_readings": [
       {
         "time": null,
-        "value_kw": 0.375
-      },
-      {
-        "time": null,
-        "value_kw": 0.335
-      },
-      {
-        "time": null,
-        "value_kw": 0.335
-      },
-      {
-        "time": null,
-        "value_kw": 0.333
-      },
-      {
-        "time": null,
-        "value_kw": 0.333
-      },
-      {
-        "time": null,
         "value_kw": 0.332
+      },
+      {
+        "time": null,
+        "value_kw": 0.331
+      },
+      {
+        "time": null,
+        "value_kw": 0.329
+      },
+      {
+        "time": null,
+        "value_kw": 0.335
+      },
+      {
+        "time": null,
+        "value_kw": 0.33
+      },
+      {
+        "time": null,
+        "value_kw": 0.347
       }
     ]
   }
