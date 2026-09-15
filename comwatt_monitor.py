@@ -167,6 +167,21 @@ def recent_window(points, window_minutes, total_span_minutes=60):
     return points[-take:]
 
 
+def format_readings(readings):
+    lines = []
+    for r in readings:
+        if r.get("time"):
+            try:
+                dt = datetime.fromisoformat(r["time"])
+                time_str = dt.strftime("%H:%M UTC")
+            except ValueError:
+                time_str = "?"
+        else:
+            time_str = "?"
+        lines.append(f"  {time_str} — {r['value_kw']:.2f} kW")
+    return "\n".join(lines)
+
+
 def send_email(subject, body, cfg):
     msg = MIMEText(body, "plain", "utf-8")
     msg["Subject"] = subject
@@ -256,10 +271,17 @@ def main():
     # --- Critère 3 : fuite d'eau probable (mesures répétées au-dessus du plancher) ---
     leak_cfg = config.get("leak_detection", {})
     leak_baseline_kw, leak_spike_threshold_kw, leak_spike_count = None, None, 0
+    leak_window_values = []
+    leak_recent_readings = []
     if leak_cfg.get("enabled", False):
         kw_points = chronological_kw_points(consumption_series)
         window_points = recent_window(kw_points, leak_cfg["window_minutes"], total_span_minutes=60)
         values = [v for _, v in window_points]
+        leak_window_values = [round(v, 3) for v in values]
+        leak_recent_readings = [
+            {"time": ts.isoformat() if ts is not None else None, "value_kw": round(v, 3)}
+            for ts, v in window_points[-6:]
+        ]
         if values:
             leak_baseline_kw = min(values)
             leak_spike_threshold_kw = leak_baseline_kw + leak_cfg["spike_above_baseline_kw"]
@@ -269,7 +291,8 @@ def main():
             alerts.append(
                 f"💧 Fuite d'eau probable : {leak_spike_count} mesures en {leak_cfg['window_minutes']} min "
                 f"dépassant le plancher de {leak_baseline_kw:.2f} kW de plus de "
-                f"{leak_cfg['spike_above_baseline_kw']} kW."
+                f"{leak_cfg['spike_above_baseline_kw']} kW.\n"
+                f"Dernières mesures :\n{format_readings(leak_recent_readings)}"
             )
 
     # --- Envoi des emails avec cooldown pour éviter le spam ---
@@ -319,6 +342,8 @@ def main():
                     "spike_threshold_kw": round(leak_spike_threshold_kw, 3) if leak_spike_threshold_kw is not None else None,
                     "spike_count": leak_spike_count,
                     "window_minutes": leak_cfg.get("window_minutes"),
+                    "window_values_kw": leak_window_values,
+                    "recent_readings": leak_recent_readings,
                 },
             },
             f,
