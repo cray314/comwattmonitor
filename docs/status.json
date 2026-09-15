@@ -1,24 +1,21 @@
 {
-  "updated_at": "2026-09-15T17:01:00.046545+00:00",
-  "production_kw": 0.628,
-  "consumption_kw": 0.446,
-  "active_alerts": [],
+  "updated_at": "2026-09-15T17:10:32.500145+00:00",
+  "production_kw": 0.171,
+  "consumption_kw": 0.431,
+  "active_alerts": [
+    "\u2600\ufe0f Chute de production : 1.12 kW \u2192 0.17 kW (-85%) en 15 min. Panne possible."
+  ],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
     "production_drop_ratio": 0.6
   },
   "leak_check": {
     "enabled": true,
-    "baseline_kw": 0.349,
-    "spike_threshold_kw": 1.449,
-    "spike_count": 1,
+    "baseline_kw": 0.378,
+    "spike_threshold_kw": 1.478,
+    "spike_count": 0,
     "window_minutes": 60,
     "window_values_kw": [
-      3.131,
-      0.349,
-      0.375,
-      0.371,
-      0.375,
       0.378,
       0.384,
       0.39,
@@ -43,32 +40,37 @@
       0.447,
       0.451,
       0.446,
-      0.446
+      0.446,
+      0.442,
+      0.434,
+      0.429,
+      0.43,
+      0.431
     ],
     "recent_readings": [
+      {
+        "time": null,
+        "value_kw": 0.446
+      },
       {
         "time": null,
         "value_kw": 0.442
       },
       {
         "time": null,
-        "value_kw": 0.444
+        "value_kw": 0.434
       },
       {
         "time": null,
-        "value_kw": 0.447
+        "value_kw": 0.429
       },
       {
         "time": null,
-        "value_kw": 0.451
+        "value_kw": 0.43
       },
       {
         "time": null,
-        "value_kw": 0.446
-      },
-      {
-        "time": null,
-        "value_kw": 0.446
+        "value_kw": 0.431
       }
     ]
   }
