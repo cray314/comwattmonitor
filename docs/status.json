@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-09-15T12:50:35.045219+00:00",
-  "production_kw": 5.974,
-  "consumption_kw": 4.34,
+  "updated_at": "2026-09-15T13:01:00.412733+00:00",
+  "production_kw": 5.896,
+  "consumption_kw": 4.595,
   "active_alerts": [
-    "\ud83d\udca7 Fuite d'eau probable : 13 mesures en 60 min d\u00e9passant le plancher de 1.78 kW de plus de 1.1 kW.\nDerni\u00e8res mesures :\n  ? \u2014 1.92 kW\n  ? \u2014 4.01 kW\n  ? \u2014 4.94 kW\n  ? \u2014 2.27 kW\n  ? \u2014 1.91 kW\n  ? \u2014 4.34 kW"
+    "\ud83d\udca7 Fuite d'eau probable : 15 mesures en 60 min d\u00e9passant le plancher de 1.81 kW de plus de 1.1 kW.\nDerni\u00e8res mesures :\n  ? \u2014 4.34 kW\n  ? \u2014 4.80 kW\n  ? \u2014 1.81 kW\n  ? \u2014 1.87 kW\n  ? \u2014 4.85 kW\n  ? \u2014 4.59 kW"
   ],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
@@ -11,16 +11,11 @@
   },
   "leak_check": {
     "enabled": true,
-    "baseline_kw": 1.776,
-    "spike_threshold_kw": 2.876,
-    "spike_count": 13,
+    "baseline_kw": 1.815,
+    "spike_threshold_kw": 2.915,
+    "spike_count": 15,
     "window_minutes": 60,
     "window_values_kw": [
-      1.776,
-      1.845,
-      1.868,
-      1.878,
-      1.944,
       1.957,
       1.953,
       1.944,
@@ -45,32 +40,37 @@
       4.941,
       2.275,
       1.914,
-      4.34
+      4.34,
+      4.804,
+      1.815,
+      1.874,
+      4.847,
+      4.595
     ],
     "recent_readings": [
       {
         "time": null,
-        "value_kw": 1.92
-      },
-      {
-        "time": null,
-        "value_kw": 4.007
-      },
-      {
-        "time": null,
-        "value_kw": 4.941
-      },
-      {
-        "time": null,
-        "value_kw": 2.275
-      },
-      {
-        "time": null,
-        "value_kw": 1.914
-      },
-      {
-        "time": null,
         "value_kw": 4.34
+      },
+      {
+        "time": null,
+        "value_kw": 4.804
+      },
+      {
+        "time": null,
+        "value_kw": 1.815
+      },
+      {
+        "time": null,
+        "value_kw": 1.874
+      },
+      {
+        "time": null,
+        "value_kw": 4.847
+      },
+      {
+        "time": null,
+        "value_kw": 4.595
       }
     ]
   }
