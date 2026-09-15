@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-09-15T00:10:32.590692+00:00",
+  "updated_at": "2026-09-15T00:20:31.959013+00:00",
   "production_kw": 0.008,
-  "consumption_kw": 0.248,
+  "consumption_kw": 0.24,
   "active_alerts": [],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
