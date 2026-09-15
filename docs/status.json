@@ -1,26 +1,19 @@
 {
-  "updated_at": "2026-09-15T16:50:32.825783+00:00",
-  "production_kw": 0.862,
-  "consumption_kw": 0.442,
-  "active_alerts": [
-    "\ud83d\udca7 Fuite d'eau probable : 3 mesures en 60 min d\u00e9passant le plancher de 0.24 kW de plus de 1.1 kW.\nDerni\u00e8res mesures :\n  ? \u2014 0.47 kW\n  ? \u2014 0.45 kW\n  ? \u2014 0.44 kW\n  ? \u2014 0.43 kW\n  ? \u2014 0.44 kW\n  ? \u2014 0.44 kW"
-  ],
+  "updated_at": "2026-09-15T17:01:00.046545+00:00",
+  "production_kw": 0.628,
+  "consumption_kw": 0.446,
+  "active_alerts": [],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
     "production_drop_ratio": 0.6
   },
   "leak_check": {
     "enabled": true,
-    "baseline_kw": 0.24,
-    "spike_threshold_kw": 1.34,
-    "spike_count": 3,
+    "baseline_kw": 0.349,
+    "spike_threshold_kw": 1.449,
+    "spike_count": 1,
     "window_minutes": 60,
     "window_values_kw": [
-      0.243,
-      3.04,
-      2.969,
-      0.24,
-      0.447,
       3.131,
       0.349,
       0.375,
@@ -45,12 +38,21 @@
       0.438,
       0.435,
       0.437,
-      0.442
+      0.442,
+      0.444,
+      0.447,
+      0.451,
+      0.446,
+      0.446
     ],
     "recent_readings": [
       {
         "time": null,
-        "value_kw": 0.474
+        "value_kw": 0.442
+      },
+      {
+        "time": null,
+        "value_kw": 0.444
       },
       {
         "time": null,
@@ -58,19 +60,15 @@
       },
       {
         "time": null,
-        "value_kw": 0.438
+        "value_kw": 0.451
       },
       {
         "time": null,
-        "value_kw": 0.435
+        "value_kw": 0.446
       },
       {
         "time": null,
-        "value_kw": 0.437
-      },
-      {
-        "time": null,
-        "value_kw": 0.442
+        "value_kw": 0.446
       }
     ]
   }
