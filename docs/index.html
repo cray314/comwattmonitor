@@ -158,6 +158,7 @@
 
   <div class="thresholds" id="leakCard" style="margin-bottom: 12px;">
     <div>Surveillance fuite d'eau : <b id="leakStatus">—</b></div>
+    <div id="leakReadings" style="margin-top: 10px;"></div>
   </div>
 
   <div class="thresholds">
@@ -185,14 +186,29 @@ async function loadStatus() {
 
     const leak = data.leak_check;
     const leakStatus = document.getElementById('leakStatus');
+    const leakReadings = document.getElementById('leakReadings');
     if (leak && leak.enabled && leak.baseline_kw != null) {
       leakStatus.textContent = `${leak.spike_count} mesure(s) > ${leak.spike_threshold_kw.toFixed(2)} kW sur ${leak.window_minutes} min (plancher ${leak.baseline_kw.toFixed(2)} kW)`;
+      if (leak.recent_readings && leak.recent_readings.length > 0) {
+        const rows = leak.recent_readings.map(r => {
+          const timeStr = r.time ? new Date(r.time).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '—';
+          const isSpike = leak.spike_threshold_kw != null && r.value_kw >= leak.spike_threshold_kw;
+          const color = isSpike ? 'var(--alert)' : 'var(--text)';
+          return `<div style="display:flex; justify-content:space-between; padding:2px 0;"><span>${timeStr}</span><span style="color:${color}; font-weight:${isSpike ? 600 : 400};">${r.value_kw.toFixed(2)} kW</span></div>`;
+        }).join('');
+        leakReadings.innerHTML = '<div style="color: var(--muted); margin-bottom:4px;">Dernières mesures :</div>' + rows;
+      } else {
+        leakReadings.innerHTML = '';
+      }
     } else if (leak && leak.enabled) {
       leakStatus.textContent = 'en attente de données';
+      leakReadings.innerHTML = '';
     } else if (leak) {
       leakStatus.textContent = 'désactivée';
+      leakReadings.innerHTML = '';
     } else {
       leakStatus.textContent = '—';
+      leakReadings.innerHTML = '';
     }
 
     const updatedDate = new Date(data.updated_at);
