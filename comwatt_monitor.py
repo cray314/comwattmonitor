@@ -201,6 +201,31 @@ def format_readings(readings):
     return "\n".join(lines)
 
 
+def detect_short_pulses(points, threshold_kw, max_pulse_minutes):
+    """Détecte les segments continus au-dessus du seuil qui redescendent en
+    dessous en moins de `max_pulse_minutes`. Un plateau qui reste élevé plus
+    longtemps (ou qui ne redescend jamais avant la fin de la fenêtre) n'est
+    PAS compté : ça ressemble à un appareil qui tourne en continu, pas à une
+    pompe qui cycle."""
+    pulses = []
+    start_idx = None
+    for i, (ts, v) in enumerate(points):
+        is_on = v >= threshold_kw
+        if is_on and start_idx is None:
+            start_idx = i
+        elif not is_on and start_idx is not None:
+            start_ts = points[start_idx][0]
+            end_ts = points[i][0]
+            if start_ts is not None and end_ts is not None:
+                duration = (end_ts - start_ts).total_seconds() / 60
+                if duration <= max_pulse_minutes:
+                    pulses.append({"start": start_ts, "duration_minutes": round(duration, 1)})
+            start_idx = None
+    # Un pulse encore "en cours" à la toute fin de la fenêtre n'est pas
+    # comptabilisé : on ne sait pas encore s'il va redescendre vite.
+    return pulses
+
+
 def send_email(subject, body, cfg):
     msg = MIMEText(body, "plain", "utf-8")
     msg["Subject"] = subject
@@ -287,11 +312,12 @@ def main():
                 f"(-{drop_ratio*100:.0f}%) en {config['production_drop_window_minutes']} min. Panne possible."
             )
 
-    # --- Critère 3 : fuite d'eau probable (mesures répétées au-dessus du plancher) ---
+    # --- Critère 3 : fuite d'eau probable (pics courts et répétés, pas un plateau) ---
     leak_cfg = config.get("leak_detection", {})
-    leak_baseline_kw, leak_spike_threshold_kw, leak_spike_count = None, None, 0
+    leak_baseline_kw, leak_spike_threshold_kw = None, None
     leak_window_values = []
     leak_recent_readings = []
+    leak_pulses = []
     if leak_cfg.get("enabled", False):
         kw_points = chronological_kw_points(consumption_series, end_time=now, total_span_minutes=60)
         window_points = recent_window(kw_points, leak_cfg["window_minutes"], total_span_minutes=60)
@@ -304,13 +330,16 @@ def main():
         if values:
             leak_baseline_kw = min(values)
             leak_spike_threshold_kw = leak_baseline_kw + leak_cfg["spike_above_baseline_kw"]
-            leak_spike_count = sum(1 for v in values if v >= leak_spike_threshold_kw)
+            leak_pulses = detect_short_pulses(
+                window_points, leak_spike_threshold_kw, leak_cfg["max_pulse_minutes"]
+            )
 
-        if leak_spike_count >= leak_cfg["min_spike_samples"]:
+        if len(leak_pulses) >= leak_cfg["min_pulses"]:
+            pulses_desc = ", ".join(f"{p['duration_minutes']:.1f} min" for p in leak_pulses)
             alerts.append(
-                f"💧 Fuite d'eau probable : {leak_spike_count} mesures en {leak_cfg['window_minutes']} min "
+                f"💧 Fuite d'eau probable : {len(leak_pulses)} pics courts en {leak_cfg['window_minutes']} min "
                 f"dépassant le plancher de {leak_baseline_kw:.2f} kW de plus de "
-                f"{leak_cfg['spike_above_baseline_kw']} kW.\n"
+                f"{leak_cfg['spike_above_baseline_kw']} kW (durées : {pulses_desc}).\n"
                 f"Dernières mesures :\n{format_readings(leak_recent_readings)}"
             )
 
@@ -359,7 +388,11 @@ def main():
                     "enabled": leak_cfg.get("enabled", False),
                     "baseline_kw": round(leak_baseline_kw, 3) if leak_baseline_kw is not None else None,
                     "spike_threshold_kw": round(leak_spike_threshold_kw, 3) if leak_spike_threshold_kw is not None else None,
-                    "spike_count": leak_spike_count,
+                    "pulses_count": len(leak_pulses),
+                    "pulses": [
+                        {"start": p["start"].isoformat() if p["start"] else None, "duration_minutes": p["duration_minutes"]}
+                        for p in leak_pulses
+                    ],
                     "window_minutes": leak_cfg.get("window_minutes"),
                     "window_values_kw": leak_window_values,
                     "recent_readings": leak_recent_readings,
@@ -371,7 +404,7 @@ def main():
 
     print(
         f"OK — production={prod_now} kW, consommation={cons_now} kW, "
-        f"fuite: {leak_spike_count} mesures au-dessus du plancher, alertes={alerts}"
+        f"fuite: {len(leak_pulses)} pics courts, alertes={alerts}"
     )
 
 
