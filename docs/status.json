@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-09-16T17:30:48.898597+00:00",
-  "production_kw": 0.112,
-  "consumption_kw": 1.075,
+  "updated_at": "2026-09-16T17:40:32.445360+00:00",
+  "production_kw": 0.139,
+  "consumption_kw": 0.662,
   "active_alerts": [
-    "\ud83d\udca7 Fuite d'eau probable : 3 pics courts en 60 min d\u00e9passant le plancher de 0.28 kW de plus de 1.1 kW (dur\u00e9es : 2.1 min, 4.1 min, 2.1 min).\nDerni\u00e8res mesures :\n  19h20 \u2014 1.26 kW\n  19h22 \u2014 1.35 kW\n  19h24 \u2014 1.01 kW\n  19h26 \u2014 1.08 kW\n  19h28 \u2014 1.10 kW\n  19h30 \u2014 1.07 kW"
+    "\ud83d\udca7 Fuite d'eau probable : 3 pics courts en 60 min d\u00e9passant le plancher de 0.40 kW de plus de 1.1 kW (dur\u00e9es : 2.1 min, 4.1 min, 2.1 min).\nDerni\u00e8res mesures :\n  19h30 \u2014 1.07 kW\n  19h32 \u2014 1.12 kW\n  19h34 \u2014 1.09 kW\n  19h36 \u2014 1.07 kW\n  19h38 \u2014 1.06 kW\n  19h40 \u2014 0.66 kW"
   ],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
@@ -11,30 +11,25 @@
   },
   "leak_check": {
     "enabled": true,
-    "baseline_kw": 0.284,
-    "spike_threshold_kw": 1.384,
+    "baseline_kw": 0.404,
+    "spike_threshold_kw": 1.504,
     "pulses_count": 3,
     "pulses": [
       {
-        "start": "2026-09-16T16:43:13.726183+00:00",
+        "start": "2026-09-16T16:42:36.583291+00:00",
         "duration_minutes": 2.1
       },
       {
-        "start": "2026-09-16T17:08:03.381356+00:00",
+        "start": "2026-09-16T17:07:26.238463+00:00",
         "duration_minutes": 4.1
       },
       {
-        "start": "2026-09-16T17:14:15.795149+00:00",
+        "start": "2026-09-16T17:13:38.652257+00:00",
         "duration_minutes": 2.1
       }
     ],
     "window_minutes": 60,
     "window_values_kw": [
-      0.284,
-      0.323,
-      0.375,
-      0.376,
-      0.409,
       0.404,
       2.032,
       1.106,
@@ -59,32 +54,37 @@
       1.01,
       1.08,
       1.104,
-      1.075
+      1.075,
+      1.118,
+      1.089,
+      1.074,
+      1.061,
+      0.662
     ],
     "recent_readings": [
       {
-        "time": "2026-09-16T17:20:28.208942+00:00",
-        "value_kw": 1.263
-      },
-      {
-        "time": "2026-09-16T17:22:32.346873+00:00",
-        "value_kw": 1.347
-      },
-      {
-        "time": "2026-09-16T17:24:36.484804+00:00",
-        "value_kw": 1.01
-      },
-      {
-        "time": "2026-09-16T17:26:40.622735+00:00",
-        "value_kw": 1.08
-      },
-      {
-        "time": "2026-09-16T17:28:44.760666+00:00",
-        "value_kw": 1.104
-      },
-      {
-        "time": "2026-09-16T17:30:48.898597+00:00",
+        "time": "2026-09-16T17:30:11.755705+00:00",
         "value_kw": 1.075
+      },
+      {
+        "time": "2026-09-16T17:32:15.893636+00:00",
+        "value_kw": 1.118
+      },
+      {
+        "time": "2026-09-16T17:34:20.031567+00:00",
+        "value_kw": 1.089
+      },
+      {
+        "time": "2026-09-16T17:36:24.169498+00:00",
+        "value_kw": 1.074
+      },
+      {
+        "time": "2026-09-16T17:38:28.307429+00:00",
+        "value_kw": 1.061
+      },
+      {
+        "time": "2026-09-16T17:40:32.445360+00:00",
+        "value_kw": 0.662
       }
     ]
   }
