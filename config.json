@@ -11,6 +11,6 @@
     "enabled": true,
     "spike_above_baseline_kw": 1.1,
     "window_minutes": 60,
-    "min_spike_samples": 3
+    "min_spike_samples": 6
   }
 }
