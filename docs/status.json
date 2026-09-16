@@ -1,25 +1,22 @@
 {
-  "updated_at": "2026-09-16T14:50:34.065208+00:00",
-  "production_kw": 1.429,
-  "consumption_kw": 2.079,
-  "active_alerts": [],
+  "updated_at": "2026-09-16T15:00:58.014121+00:00",
+  "production_kw": 1.247,
+  "consumption_kw": 2.035,
+  "active_alerts": [
+    "\u2600\ufe0f Chute de production : 5.02 kW \u2192 1.25 kW (-75%) en 15 min. Panne possible."
+  ],
   "thresholds": {
     "consumption_threshold_kw": 5.0,
     "production_drop_ratio": 0.6
   },
   "leak_check": {
     "enabled": true,
-    "baseline_kw": 2.079,
-    "spike_threshold_kw": 3.179,
+    "baseline_kw": 2.026,
+    "spike_threshold_kw": 3.126,
     "pulses_count": 0,
     "pulses": [],
     "window_minutes": 60,
     "window_values_kw": [
-      4.371,
-      4.519,
-      4.532,
-      4.5,
-      4.5,
       4.477,
       4.991,
       6.76,
@@ -44,32 +41,37 @@
       2.14,
       2.12,
       2.081,
-      2.079
+      2.079,
+      2.059,
+      2.031,
+      2.027,
+      2.026,
+      2.035
     ],
     "recent_readings": [
       {
-        "time": "2026-09-16T14:40:13.375553+00:00",
-        "value_kw": 2.102
-      },
-      {
-        "time": "2026-09-16T14:42:17.513484+00:00",
-        "value_kw": 2.126
-      },
-      {
-        "time": "2026-09-16T14:44:21.651415+00:00",
-        "value_kw": 2.14
-      },
-      {
-        "time": "2026-09-16T14:46:25.789346+00:00",
-        "value_kw": 2.12
-      },
-      {
-        "time": "2026-09-16T14:48:29.927277+00:00",
-        "value_kw": 2.081
-      },
-      {
-        "time": "2026-09-16T14:50:34.065208+00:00",
+        "time": "2026-09-16T14:50:37.324466+00:00",
         "value_kw": 2.079
+      },
+      {
+        "time": "2026-09-16T14:52:41.462397+00:00",
+        "value_kw": 2.059
+      },
+      {
+        "time": "2026-09-16T14:54:45.600328+00:00",
+        "value_kw": 2.031
+      },
+      {
+        "time": "2026-09-16T14:56:49.738259+00:00",
+        "value_kw": 2.027
+      },
+      {
+        "time": "2026-09-16T14:58:53.876190+00:00",
+        "value_kw": 2.026
+      },
+      {
+        "time": "2026-09-16T15:00:58.014121+00:00",
+        "value_kw": 2.035
       }
     ]
   }
