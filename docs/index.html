@@ -191,7 +191,7 @@ async function loadStatus() {
       leakStatus.textContent = `${leak.spike_count} mesure(s) > ${leak.spike_threshold_kw.toFixed(2)} kW sur ${leak.window_minutes} min (plancher ${leak.baseline_kw.toFixed(2)} kW)`;
       if (leak.recent_readings && leak.recent_readings.length > 0) {
         const rows = leak.recent_readings.map(r => {
-          const timeStr = r.time ? new Date(r.time).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '—';
+          const timeStr = r.time ? new Date(r.time).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris'}) : '—';
           const isSpike = leak.spike_threshold_kw != null && r.value_kw >= leak.spike_threshold_kw;
           const color = isSpike ? 'var(--alert)' : 'var(--text)';
           return `<div style="display:flex; justify-content:space-between; padding:2px 0;"><span>${timeStr}</span><span style="color:${color}; font-weight:${isSpike ? 600 : 400};">${r.value_kw.toFixed(2)} kW</span></div>`;
