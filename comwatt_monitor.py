@@ -23,6 +23,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from email.mime.text import MIMEText
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from comwatt_client import ComwattClient, ComwattAuthError, ComwattAPIError
 
@@ -140,8 +141,11 @@ def parse_ts(ts):
     return None
 
 
-def chronological_kw_points(series):
-    """Convertit la série brute en liste triée de (datetime_ou_None, kW)."""
+def chronological_kw_points(series, end_time=None, total_span_minutes=60):
+    """Convertit la série brute en liste triée de (datetime, kW). Si l'API
+    ne fournit aucun timestamp exploitable, on en reconstitue en supposant
+    un échantillonnage régulier se terminant à `end_time` (par défaut
+    maintenant) et couvrant `total_span_minutes` au total."""
     raw = [point_value(p) for p in series]
     raw = [(ts, val) for ts, val in raw if val is not None]
     if not raw:
@@ -149,7 +153,19 @@ def chronological_kw_points(series):
     parsed = [(parse_ts(ts), to_kw(val)) for ts, val in raw]
     if all(ts is not None for ts, _ in parsed):
         parsed.sort(key=lambda p: p[0])
-    return parsed
+        return parsed
+
+    # Aucun timestamp utilisable dans la réponse de l'API.
+    if end_time is None:
+        end_time = datetime.now(timezone.utc)
+    n = len(parsed)
+    if n == 1:
+        return [(end_time, parsed[0][1])]
+    interval = total_span_minutes / (n - 1)
+    return [
+        (end_time - timedelta(minutes=(n - 1 - i) * interval), v)
+        for i, (_, v) in enumerate(parsed)
+    ]
 
 
 def recent_window(points, window_minutes, total_span_minutes=60):
@@ -167,13 +183,16 @@ def recent_window(points, window_minutes, total_span_minutes=60):
     return points[-take:]
 
 
+PARIS_TZ = ZoneInfo("Europe/Paris")
+
+
 def format_readings(readings):
     lines = []
     for r in readings:
         if r.get("time"):
             try:
-                dt = datetime.fromisoformat(r["time"])
-                time_str = dt.strftime("%H:%M UTC")
+                dt = datetime.fromisoformat(r["time"]).astimezone(PARIS_TZ)
+                time_str = dt.strftime("%Hh%M")
             except ValueError:
                 time_str = "?"
         else:
@@ -274,7 +293,7 @@ def main():
     leak_window_values = []
     leak_recent_readings = []
     if leak_cfg.get("enabled", False):
-        kw_points = chronological_kw_points(consumption_series)
+        kw_points = chronological_kw_points(consumption_series, end_time=now, total_span_minutes=60)
         window_points = recent_window(kw_points, leak_cfg["window_minutes"], total_span_minutes=60)
         values = [v for _, v in window_points]
         leak_window_values = [round(v, 3) for v in values]
@@ -318,7 +337,7 @@ def main():
             state["last_alert_leak"] = now.isoformat()
 
         if to_send:
-            body = "\n".join(to_send) + f"\n\nVérifié à {now.strftime('%d/%m/%Y %H:%M UTC')}."
+            body = "\n".join(to_send) + f"\n\nVérifié à {now.astimezone(PARIS_TZ).strftime('%d/%m/%Y à %Hh%M')} (heure de Paris)."
             send_email("⚠️ Alerte Comwatt", body, smtp_cfg)
 
     save_state(state)
